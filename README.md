@@ -1,14 +1,35 @@
-# UI Component Generator - Figma Plugin
+# HTML to Figma Converter - Figma Plugin
 
-一个强大且易用的Figma插件，帮助设计师快速生成常用的UI组件。支持生成按钮、卡片、输入框、标签和头像等组件，每个组件都提供丰富的自定义选项。
+一个专业的Figma插件，专注于将HTML文件转换为Figma设计元素，支持多种HTML标签、CSS样式和布局模型。
 
-## ✨ 功能特性
+## ✨ 主要功能
 
-- 🔘 **按钮组件** - 支持自定义文本、尺寸、颜色和圆角
-- 🗃️ **卡片组件** - 包含标题和描述的信息卡片
-- 📝 **输入框组件** - 带占位文本的表单输入框
-- 🏷️ **标签组件** - 小巧的状态标签和徽章
-- 👤 **头像组件** - 用户头像，支持首字母显示
+### 📄 HTML文件转换
+- **拖拽导入** - 直接将HTML文件拖拽到插件界面
+- **文件选择** - 点击选择HTML文件进行导入
+- **实时进度** - 显示解析和转换进度
+- **智能解析** - 支持多种HTML标签和CSS样式
+
+### 🎯 支持的HTML元素
+- **文本元素** - `<h1>-<h6>`, `<p>`, `<span>` (自动设置字体大小和样式)
+- **容器元素** - `<div>`, `<section>`, `<article>`, `<header>`, `<footer>` (转换为Frame)
+- **按钮元素** - `<button>` (创建带样式的按钮组件)
+- **输入元素** - `<input>`, `<textarea>` (创建输入框组件)
+- **图片元素** - `<img>` (创建图片占位符)
+- **列表元素** - `<ul>`, `<ol>`, `<li>` (创建列表布局)
+
+### 🎨 CSS样式支持
+- **颜色** - `color`, `background-color` (支持hex、rgb、hsl、命名颜色)
+- **尺寸** - `width`, `height`, `padding`, `margin` (支持px、em、rem、vh、vw、pt单位)
+- **字体** - `font-size`, `font-weight`, `font-family`, `line-height`, `text-align`
+- **边框** - `border`, `border-radius`, `box-shadow`
+- **布局** - `display: flex` (转换为Figma Auto Layout)
+
+### 📐 布局转换
+- **Flexbox支持** - `flex-direction`, `justify-content`, `align-items`, `gap`
+- **响应式布局** - 自动调整容器大小
+- **嵌套布局** - 支持复杂的嵌套结构
+- **智能定位** - 自动优化元素位置和间距
 
 ## 🚀 安装和开发
 
@@ -52,56 +73,74 @@
 
 ### 启动插件
 
-1. 在Figma中右键点击 → `Plugins` → `UI Component Generator`
+1. 在Figma中右键点击 → `Plugins` → `HTML to Figma Converter`
 2. 插件面板将在右侧打开
 
-### 创建组件
+### HTML文件转换
 
-1. **选择组件类型**
-   - 点击想要创建的组件卡片（按钮、卡片、输入框等）
+1. **导入HTML文件**
+   - 方法一：直接将HTML文件拖拽到"HTML文件导入"区域
+   - 方法二：点击导入区域选择HTML文件
 
-2. **自定义组件属性**
-   - 根据组件类型，调整相应的参数：
-     - 文本内容
-     - 尺寸大小
-     - 颜色配置
-     - 其他样式选项
+2. **等待转换完成**
+   - 插件会显示解析进度
+   - 转换完成后，元素会自动添加到画布并被选中
 
-3. **创建组件**
-   - 点击"创建组件"按钮
-   - 组件将自动添加到当前页面并被选中
+3. **查看和调整结果**
+   - 检查转换后的Figma元素
+   - 根据需要进行微调和优化
 
-### 组件详细说明
+### HTML转换详细说明
 
-#### 🔘 按钮组件
-- **文本**: 按钮显示的文字
-- **尺寸**: 宽度和高度（像素）
-- **背景色**: 按钮背景颜色
-- **文字色**: 按钮文字颜色
-- **圆角**: 按钮圆角大小
+#### 📄 支持的HTML示例
 
-#### 🗃️ 卡片组件
-- **标题**: 卡片主标题
-- **描述**: 卡片详细描述
-- **尺寸**: 卡片的宽度和高度
-- 自动包含阴影和内边距
+```html
+<!-- 标题和段落 -->
+<h1 style="color: #333; font-size: 32px;">主标题</h1>
+<p style="color: #666; font-size: 16px;">段落文本</p>
 
-#### 📝 输入框组件
-- **占位文本**: 输入框提示文字
-- **尺寸**: 输入框的宽度和高度
-- 包含默认的边框和状态样式
+<!-- 按钮 -->
+<button style="background-color: #007AFF; color: white; padding: 12px 24px; border-radius: 8px;">
+  点击按钮
+</button>
 
-#### 🏷️ 标签组件
-- **文本**: 标签显示的文字
-- **背景色**: 标签背景颜色
-- **文字色**: 标签文字颜色
-- 自动调整尺寸适应文本
+<!-- 容器和布局 -->
+<div style="display: flex; gap: 16px; padding: 20px;">
+  <div style="background-color: white; padding: 16px; border-radius: 8px;">
+    <h3>卡片标题</h3>
+    <p>卡片内容</p>
+  </div>
+</div>
 
-#### 👤 头像组件
-- **首字母**: 显示的用户名首字母（1-3个字符）
-- **尺寸**: 头像大小（正方形）
-- **背景色**: 头像背景颜色
-- 自动居中显示首字母
+<!-- 输入框 -->
+<input type="text" placeholder="请输入内容" style="width: 300px; padding: 12px;">
+<textarea placeholder="多行文本" style="width: 300px; height: 80px;"></textarea>
+
+<!-- 列表 -->
+<ul>
+  <li>列表项目 1</li>
+  <li>列表项目 2</li>
+</ul>
+```
+
+#### 🎨 CSS样式映射
+
+| CSS属性 | Figma属性 | 说明 |
+|---------|-----------|------|
+| `width`, `height` | Frame尺寸 | 支持px、em、rem单位 |
+| `background-color` | Fill颜色 | 支持hex、rgb、命名颜色 |
+| `color` | 文本颜色 | 应用于文本元素 |
+| `font-size` | 字体大小 | 自动转换单位 |
+| `font-weight` | 字体样式 | 映射到Inter字体样式 |
+| `border-radius` | 圆角 | 应用于Frame |
+| `padding` | 内边距 | 应用于Frame |
+| `display: flex` | Auto Layout | 启用自动布局 |
+| `flex-direction` | 布局方向 | 水平/垂直 |
+| `justify-content` | 主轴对齐 | 开始/居中/结束/分散 |
+| `align-items` | 交叉轴对齐 | 开始/居中/结束 |
+| `gap` | 元素间距 | Auto Layout间距 |
+
+
 
 ## 🛠️ 开发命令
 
@@ -123,20 +162,40 @@ npm run lint:fix
 
 ```
 html2figma/
-├── code.ts          # 插件主逻辑代码
-├── ui.html          # 插件用户界面
-├── manifest.json    # 插件配置文件
-├── package.json     # 项目依赖配置
-├── tsconfig.json    # TypeScript配置
-└── README.md        # 项目说明文档
+├── code.ts              # 插件主逻辑代码（HTML解析引擎）
+├── code.js              # 编译后的JavaScript文件
+├── ui.html              # 插件用户界面（HTML文件拖拽区域）
+├── manifest.json        # 插件配置文件
+├── package.json         # 项目依赖配置
+├── tsconfig.json        # TypeScript配置
+├── complex-test.html    # 复杂布局测试文件
+├── HTML_CONVERSION_GUIDE.md  # HTML转换优化指南
+└── README.md            # 项目说明文档
 ```
 
-## 🎨 设计原则
+## 🎯 技术特点
 
-- **一致性**: 所有组件遵循统一的设计系统
-- **现代化**: 采用现代UI设计风格，支持阴影和圆角
-- **实用性**: 组件参数基于实际设计需求设定
-- **易用性**: 简洁直观的操作界面
+- **无依赖HTML解析**: 使用正则表达式实现轻量级HTML解析，无需外部库
+- **智能样式映射**: 将CSS样式智能转换为Figma属性
+- **增强的CSS支持**: 支持外部样式表、选择器优先级、多种颜色格式
+- **完善错误处理**: 详细的错误处理和用户反馈机制
+- **实时进度提示**: 显示解析和转换进度
+- **类型安全**: 完整的TypeScript类型定义
+- **专注性**: 专门针对HTML到Figma转换优化
+- **易用性**: 简洁直观的拖拽操作界面
+
+## 📝 示例文件
+
+项目包含一个 `test.html` 文件，展示了插件支持的各种HTML元素和CSS样式：
+
+- 标题和段落文本
+- 带样式的按钮
+- Flexbox布局容器
+- 输入框和文本域
+- 图片占位符
+- 信息提示卡片
+
+你可以使用这个文件来测试插件的HTML转换功能。
 
 ## 🤝 贡献
 

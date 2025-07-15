@@ -43,79 +43,7 @@
       margin-bottom: 12px;
     }
     
-    .component-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-bottom: 24px;
-    }
-    
-    .component-card {
-      padding: 16px;
-      border: 2px solid #F2F2F7;
-      border-radius: 8px;
-      text-align: center;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      background: #fff;
-    }
-    
-    .component-card:hover {
-      border-color: #007AFF;
-      background: #F7F9FF;
-    }
-    
-    .component-card.selected {
-      border-color: #007AFF;
-      background: #007AFF;
-      color: white;
-    }
-    
-    .component-icon {
-      font-size: 24px;
-      margin-bottom: 8px;
-    }
-    
-    .component-name {
-      font-weight: 500;
-      font-size: 12px;
-    }
-    
-    .form-group {
-      margin-bottom: 16px;
-    }
-    
-    .form-label {
-      display: block;
-      font-weight: 500;
-      color: #1C1C1E;
-      margin-bottom: 6px;
-      font-size: 12px;
-    }
-    
-    .form-input {
-      width: 100%;
-      padding: 8px 12px;
-      border: 1px solid #D1D1D6;
-      border-radius: 6px;
-      font-size: 13px;
-      font-family: inherit;
-    }
-    
-    .form-input:focus {
-      outline: none;
-      border-color: #007AFF;
-      box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
-    }
-    
-    .color-input {
-      width: 40px;
-      height: 32px;
-      padding: 0;
-      border: 1px solid #D1D1D6;
-      border-radius: 6px;
-      cursor: pointer;
-    }
+
     
     .button-group {
       display: flex;
@@ -151,262 +79,195 @@
     .btn-secondary:hover {
       background: #E5E5EA;
     }
-    
-    .options-panel {
-      display: none;
-      border-top: 1px solid #F2F2F7;
-      padding-top: 20px;
-      margin-top: 20px;
+
+    /* Drop Zone Styles */
+    .drop-zone {
+      border: 2px dashed #D1D1D6;
+      border-radius: 12px;
+      padding: 32px 16px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      background: #FAFAFA;
+      margin-bottom: 24px;
     }
-    
-    .options-panel.show {
+
+    .drop-zone:hover {
+      border-color: #007AFF;
+      background: #F7F9FF;
+    }
+
+    .drop-zone.dragover {
+      border-color: #007AFF;
+      background: #F0F8FF;
+      transform: scale(1.02);
+    }
+
+    .drop-zone-content {
+      pointer-events: none;
+    }
+
+    .drop-icon {
+      font-size: 32px;
+      margin-bottom: 12px;
+      opacity: 0.6;
+    }
+
+    .drop-text {
+      font-size: 14px;
+      font-weight: 500;
+      color: #1C1C1E;
+      margin-bottom: 4px;
+    }
+
+    .drop-subtext {
+      font-size: 12px;
+      color: #8E8E93;
+    }
+
+    .processing {
+      display: none;
+      text-align: center;
+      padding: 20px;
+      background: #F0F8FF;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+
+    .processing.show {
       display: block;
     }
-    
-    .form-row {
-      display: flex;
-      gap: 12px;
+
+    .spinner {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 2px solid #D1D1D6;
+      border-radius: 50%;
+      border-top-color: #007AFF;
+      animation: spin 1s ease-in-out infinite;
+      margin-right: 8px;
     }
-    
-    .form-row .form-group {
-      flex: 1;
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
     }
   </style>
 </head>
 <body>
   <div class="header">
-    <div class="title">UI Component Generator</div>
-    <div class="subtitle">快速创建常用UI组件</div>
+    <div class="title">HTML to Figma Converter</div>
+    <div class="subtitle">将HTML文件转换为Figma设计元素</div>
   </div>
 
+  <!-- HTML Import Section -->
   <div class="section">
-    <div class="section-title">选择组件类型</div>
-    <div class="component-grid">
-      <div class="component-card" data-component="button">
-        <div class="component-icon">🔘</div>
-        <div class="component-name">Button</div>
-      </div>
-      <div class="component-card" data-component="card">
-        <div class="component-icon">🗃️</div>
-        <div class="component-name">Card</div>
-      </div>
-      <div class="component-card" data-component="input">
-        <div class="component-icon">📝</div>
-        <div class="component-name">Input</div>
-      </div>
-      <div class="component-card" data-component="badge">
-        <div class="component-icon">🏷️</div>
-        <div class="component-name">Badge</div>
-      </div>
-      <div class="component-card" data-component="avatar">
-        <div class="component-icon">👤</div>
-        <div class="component-name">Avatar</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="options-panel" id="optionsPanel">
-    <div class="section-title">自定义选项</div>
-    
-    <!-- Button Options -->
-    <div class="component-options" id="button-options">
-      <div class="form-group">
-        <label class="form-label">按钮文本</label>
-        <input type="text" class="form-input" id="button-text" value="Button" placeholder="输入按钮文本">
-      </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label class="form-label">宽度</label>
-          <input type="number" class="form-input" id="button-width" value="120" min="60">
-        </div>
-        <div class="form-group">
-          <label class="form-label">高度</label>
-          <input type="number" class="form-input" id="button-height" value="40" min="24">
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label class="form-label">背景色</label>
-          <input type="color" class="color-input" id="button-bg" value="#007AFF">
-        </div>
-        <div class="form-group">
-          <label class="form-label">文字色</label>
-          <input type="color" class="color-input" id="button-color" value="#FFFFFF">
-        </div>
-        <div class="form-group">
-          <label class="form-label">圆角</label>
-          <input type="number" class="form-input" id="button-radius" value="8" min="0">
-        </div>
+    <div class="section-title">HTML文件导入</div>
+    <div class="drop-zone" id="dropZone">
+      <div class="drop-zone-content">
+        <div class="drop-icon">📄</div>
+        <div class="drop-text">拖拽HTML文件到此处</div>
+        <div class="drop-subtext">或点击选择文件</div>
+        <input type="file" id="fileInput" accept=".html,.htm" style="display: none;">
       </div>
     </div>
 
-    <!-- Card Options -->
-    <div class="component-options" id="card-options" style="display: none;">
-      <div class="form-group">
-        <label class="form-label">卡片标题</label>
-        <input type="text" class="form-input" id="card-title" value="Card Title" placeholder="输入卡片标题">
-      </div>
-      <div class="form-group">
-        <label class="form-label">卡片描述</label>
-        <textarea class="form-input" id="card-description" rows="3" placeholder="输入卡片描述">This is a card description that provides more details about the card content.</textarea>
-      </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label class="form-label">宽度</label>
-          <input type="number" class="form-input" id="card-width" value="280" min="200">
-        </div>
-        <div class="form-group">
-          <label class="form-label">高度</label>
-          <input type="number" class="form-input" id="card-height" value="200" min="120">
-        </div>
-      </div>
-    </div>
-
-    <!-- Input Options -->
-    <div class="component-options" id="input-options" style="display: none;">
-      <div class="form-group">
-        <label class="form-label">占位文本</label>
-        <input type="text" class="form-input" id="input-placeholder" value="Enter text..." placeholder="输入占位文本">
-      </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label class="form-label">宽度</label>
-          <input type="number" class="form-input" id="input-width" value="280" min="120">
-        </div>
-        <div class="form-group">
-          <label class="form-label">高度</label>
-          <input type="number" class="form-input" id="input-height" value="44" min="32">
-        </div>
-      </div>
-    </div>
-
-    <!-- Badge Options -->
-    <div class="component-options" id="badge-options" style="display: none;">
-      <div class="form-group">
-        <label class="form-label">标签文本</label>
-        <input type="text" class="form-input" id="badge-text" value="Badge" placeholder="输入标签文本">
-      </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label class="form-label">背景色</label>
-          <input type="color" class="color-input" id="badge-bg" value="#34C759">
-        </div>
-        <div class="form-group">
-          <label class="form-label">文字色</label>
-          <input type="color" class="color-input" id="badge-color" value="#FFFFFF">
-        </div>
-      </div>
-    </div>
-
-    <!-- Avatar Options -->
-    <div class="component-options" id="avatar-options" style="display: none;">
-      <div class="form-group">
-        <label class="form-label">用户名首字母</label>
-        <input type="text" class="form-input" id="avatar-initials" value="AB" placeholder="输入首字母" maxlength="3">
-      </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label class="form-label">尺寸</label>
-          <input type="number" class="form-input" id="avatar-size" value="48" min="24" max="200">
-        </div>
-        <div class="form-group">
-          <label class="form-label">背景色</label>
-          <input type="color" class="color-input" id="avatar-bg" value="#007AFF">
-        </div>
-      </div>
+    <!-- Processing indicator -->
+    <div class="processing" id="processingIndicator">
+      <div class="spinner"></div>
+      <span id="processingText">正在解析HTML文件...</span>
     </div>
   </div>
 
   <div class="button-group">
     <button class="btn btn-secondary" onclick="cancel()">取消</button>
-    <button class="btn btn-primary" onclick="createComponent()" id="createBtn" disabled>创建组件</button>
   </div>
 
   <script>
-    let selectedComponent = null;
+    // HTML File Drop Zone Functionality
+    const dropZone = document.getElementById('dropZone');
+    const fileInput = document.getElementById('fileInput');
+    const processingIndicator = document.getElementById('processingIndicator');
+    const processingText = document.getElementById('processingText');
 
-    // Component selection
-    document.querySelectorAll('.component-card').forEach(card => {
-      card.addEventListener('click', () => {
-        // Remove previous selection
-        document.querySelectorAll('.component-card').forEach(c => c.classList.remove('selected'));
-        
-        // Select current
-        card.classList.add('selected');
-        selectedComponent = card.dataset.component;
-        
-        // Show options panel
-        document.getElementById('optionsPanel').classList.add('show');
-        
-        // Hide all option panels
-        document.querySelectorAll('.component-options').forEach(panel => {
-          panel.style.display = 'none';
-        });
-        
-        // Show selected component options
-        const optionsPanel = document.getElementById(selectedComponent + '-options');
-        if (optionsPanel) {
-          optionsPanel.style.display = 'block';
-        }
-        
-        // Enable create button
-        document.getElementById('createBtn').disabled = false;
-      });
+    // Setup drag and drop events
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+      dropZone.addEventListener(eventName, preventDefaults, false);
     });
 
-    function createComponent() {
-      if (!selectedComponent) return;
-      
-      const options = getComponentOptions(selectedComponent);
-      
-      parent.postMessage({
-        pluginMessage: {
-          type: 'create-component',
-          componentType: selectedComponent,
-          options: options
-        }
-      }, '*');
+    function preventDefaults(e) {
+      e.preventDefault();
+      e.stopPropagation();
     }
 
-    function getComponentOptions(type) {
-      switch (type) {
-        case 'button':
-          return {
-            text: document.getElementById('button-text').value,
-            width: parseInt(document.getElementById('button-width').value),
-            height: parseInt(document.getElementById('button-height').value),
-            backgroundColor: document.getElementById('button-bg').value,
-            textColor: document.getElementById('button-color').value,
-            borderRadius: parseInt(document.getElementById('button-radius').value)
-          };
-        case 'card':
-          return {
-            title: document.getElementById('card-title').value,
-            description: document.getElementById('card-description').value,
-            width: parseInt(document.getElementById('card-width').value),
-            height: parseInt(document.getElementById('card-height').value)
-          };
-        case 'input':
-          return {
-            placeholder: document.getElementById('input-placeholder').value,
-            width: parseInt(document.getElementById('input-width').value),
-            height: parseInt(document.getElementById('input-height').value)
-          };
-        case 'badge':
-          return {
-            text: document.getElementById('badge-text').value,
-            backgroundColor: document.getElementById('badge-bg').value,
-            textColor: document.getElementById('badge-color').value
-          };
-        case 'avatar':
-          return {
-            initials: document.getElementById('avatar-initials').value.toUpperCase(),
-            size: parseInt(document.getElementById('avatar-size').value),
-            backgroundColor: document.getElementById('avatar-bg').value
-          };
-        default:
-          return {};
+    // Highlight drop zone when dragging over it
+    ['dragenter', 'dragover'].forEach(eventName => {
+      dropZone.addEventListener(eventName, highlight, false);
+    });
+
+    ['dragleave', 'drop'].forEach(eventName => {
+      dropZone.addEventListener(eventName, unhighlight, false);
+    });
+
+    function highlight() {
+      dropZone.classList.add('dragover');
+    }
+
+    function unhighlight() {
+      dropZone.classList.remove('dragover');
+    }
+
+    // Handle dropped files
+    dropZone.addEventListener('drop', handleDrop, false);
+
+    function handleDrop(e) {
+      const dt = e.dataTransfer;
+      const files = dt.files;
+      handleFiles(files);
+    }
+
+    // Handle file input change
+    dropZone.addEventListener('click', () => {
+      fileInput.click();
+    });
+
+    fileInput.addEventListener('change', function() {
+      handleFiles(this.files);
+    });
+
+    function handleFiles(files) {
+      if (files.length === 0) return;
+
+      const file = files[0];
+      if (!file.name.match(/\.(html|htm)$/i)) {
+        alert('请选择HTML文件');
+        return;
       }
+
+      // Show processing indicator
+      processingIndicator.classList.add('show');
+      processingText.textContent = '正在解析HTML文件...';
+
+      const reader = new FileReader();
+
+      reader.onload = function(e) {
+        const htmlContent = e.target.result;
+
+        // Send HTML content to the plugin code
+        parent.postMessage({
+          pluginMessage: {
+            type: 'parse-html',
+            htmlContent: htmlContent
+          }
+        }, '*');
+      };
+
+      reader.onerror = function() {
+        processingIndicator.classList.remove('show');
+        alert('读取文件时出错');
+      };
+
+      reader.readAsText(file);
     }
 
     function cancel() {
@@ -414,6 +275,22 @@
         pluginMessage: { type: 'cancel' }
       }, '*');
     }
+
+    // Listen for messages from the plugin code
+    window.onmessage = function(event) {
+      const message = event.data.pluginMessage;
+
+      if (!message) return;
+
+      if (message.type === 'html-parse-complete') {
+        processingIndicator.classList.remove('show');
+      } else if (message.type === 'html-parse-error') {
+        processingIndicator.classList.remove('show');
+        alert('解析HTML时出错: ' + message.error);
+      } else if (message.type === 'html-parse-progress') {
+        processingText.textContent = message.message;
+      }
+    };
   </script>
 </body>
 </html> 
