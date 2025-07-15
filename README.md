@@ -58,7 +58,13 @@
 
 4. **开发模式（监听文件变化）**
    ```bash
-   npm run watch
+   npm run dev
+   ```
+
+5. **其他命令**
+   ```bash
+   npm run lint      # 代码检查
+   npm run lint:fix  # 自动修复代码问题
    ```
 
 ### 在Figma中加载插件
@@ -162,25 +168,42 @@ npm run lint:fix
 
 ```
 html2figma/
-├── code.ts              # 插件主逻辑代码（HTML解析引擎）
-├── code.js              # 编译后的JavaScript文件
-├── ui.html              # 插件用户界面（HTML文件拖拽区域）
-├── manifest.json        # 插件配置文件
-├── package.json         # 项目依赖配置
-├── tsconfig.json        # TypeScript配置
-├── complex-test.html    # 复杂布局测试文件
-├── HTML_CONVERSION_GUIDE.md  # HTML转换优化指南
-└── README.md            # 项目说明文档
+├── 📁 src/                      # 源代码目录
+│   ├── main.ts                  # 主入口文件
+│   ├── types/
+│   │   └── index.ts             # 类型定义
+│   └── modules/
+│       ├── html-parser.ts       # HTML解析模块
+│       ├── style-processor.ts   # 样式处理模块
+│       └── node-factory.ts      # Figma节点创建模块
+├── 📄 code.js                   # 构建输出（Figma读取）
+├── 📄 ui.html                   # 插件用户界面
+├── 📄 manifest.json             # 插件配置文件
+├── 📄 webpack.config.js         # 构建配置
+├── 📄 tsconfig.json             # TypeScript配置
+├── 📄 package.json              # 项目依赖配置
+├── 📄 complex-test.html         # 复杂布局测试文件
+├── 📄 HTML_CONVERSION_GUIDE.md  # HTML转换优化指南
+└── 📄 README.md                 # 项目说明文档
 ```
 
 ## 🎯 技术特点
 
-- **无依赖HTML解析**: 使用正则表达式实现轻量级HTML解析，无需外部库
-- **智能样式映射**: 将CSS样式智能转换为Figma属性
-- **增强的CSS支持**: 支持外部样式表、选择器优先级、多种颜色格式
-- **完善错误处理**: 详细的错误处理和用户反馈机制
-- **实时进度提示**: 显示解析和转换进度
-- **类型安全**: 完整的TypeScript类型定义
+### 🏗️ 模块化架构
+- **清晰的职责分离**: HTML解析、样式处理、节点创建各司其职
+- **易于维护**: 模块化设计便于代码维护和功能扩展
+- **类型安全**: 完整的TypeScript类型定义和接口约束
+- **构建优化**: 使用Webpack打包，支持开发和生产模式
+
+### 🔍 强大的解析能力
+- **无依赖HTML解析**: 使用正则表达式实现轻量级HTML解析
+- **智能样式映射**: CSS样式到Figma属性的智能转换
+- **增强的CSS支持**: 外部样式表、选择器优先级、多种颜色格式
+- **布局转换**: Flexbox到Auto Layout的智能转换
+
+### 💡 用户体验
+- **实时进度提示**: 详细的解析和转换进度反馈
+- **完善错误处理**: 友好的错误提示和恢复机制
 - **专注性**: 专门针对HTML到Figma转换优化
 - **易用性**: 简洁直观的拖拽操作界面
 
