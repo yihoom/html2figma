@@ -80,6 +80,63 @@
       background: #E5E5EA;
     }
 
+    /* AI设置面板样式 */
+    .ai-settings {
+      background: #F8F9FA;
+      border: 1px solid #E9ECEF;
+      border-radius: 8px;
+      padding: 16px;
+      margin: 16px 0;
+    }
+
+    .ai-settings h3 {
+      margin: 0 0 12px 0;
+      font-size: 14px;
+      font-weight: 600;
+      color: #495057;
+    }
+
+    .setting-group {
+      margin-bottom: 12px;
+    }
+
+    .setting-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 500;
+      color: #495057;
+      margin-bottom: 4px;
+      cursor: pointer;
+    }
+
+    .setting-label input[type="checkbox"] {
+      margin-right: 6px;
+    }
+
+    .setting-select,
+    .setting-input {
+      width: 100%;
+      padding: 6px 8px;
+      border: 1px solid #CED4DA;
+      border-radius: 4px;
+      font-size: 12px;
+      background: white;
+    }
+
+    .setting-select:focus,
+    .setting-input:focus {
+      outline: none;
+      border-color: #007AFF;
+      box-shadow: 0 0 0 2px rgba(0, 122, 255, 0.1);
+    }
+
+    .setting-group small {
+      display: block;
+      font-size: 10px;
+      color: #6C757D;
+      margin-top: 4px;
+    }
+
     /* Drop Zone Styles */
     .drop-zone {
       border: 2px dashed #D1D1D6;
@@ -172,6 +229,44 @@
       </div>
     </div>
 
+    <!-- AI设置面板 -->
+    <div class="ai-settings">
+      <h3>🤖 AI增强设置</h3>
+      <div class="setting-group">
+        <label class="setting-label">
+          <input type="checkbox" id="enableAI" checked>
+          启用AI分析
+        </label>
+        <small>使用AI分析设计模式并优化布局</small>
+      </div>
+
+      <div class="setting-group" id="aiOptions">
+        <label class="setting-label">AI模型:</label>
+        <select id="aiModel" class="setting-select">
+          <option value="local">本地规则引擎 (免费)</option>
+          <option value="gpt-3.5-turbo">GPT-3.5 Turbo (需要API Key)</option>
+          <option value="gpt-4">GPT-4 (需要API Key)</option>
+        </select>
+
+        <div id="apiKeySection" style="display: none;">
+          <label class="setting-label">OpenAI API Key:</label>
+          <input type="password" id="apiKey" class="setting-input" placeholder="sk-...">
+          <small>API Key仅在本地存储，不会上传</small>
+        </div>
+      </div>
+
+      <div class="setting-group">
+        <label class="setting-label">设计偏好:</label>
+        <select id="designPreference" class="setting-select">
+          <option value="auto">自动检测</option>
+          <option value="minimal">简约风格</option>
+          <option value="detailed">详细风格</option>
+          <option value="professional">专业风格</option>
+          <option value="playful">活泼风格</option>
+        </select>
+      </div>
+    </div>
+
     <!-- Processing indicator -->
     <div class="processing" id="processingIndicator">
       <div class="spinner"></div>
@@ -180,117 +275,289 @@
   </div>
 
   <div class="button-group">
+    <button class="btn btn-secondary" onclick="testFunction()">测试功能</button>
     <button class="btn btn-secondary" onclick="cancel()">取消</button>
   </div>
 
   <script>
-    // HTML File Drop Zone Functionality
-    const dropZone = document.getElementById('dropZone');
-    const fileInput = document.getElementById('fileInput');
-    const processingIndicator = document.getElementById('processingIndicator');
-    const processingText = document.getElementById('processingText');
-
-    // Setup drag and drop events
-    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-      dropZone.addEventListener(eventName, preventDefaults, false);
-    });
-
-    function preventDefaults(e) {
-      e.preventDefault();
-      e.stopPropagation();
+    // 确保DOM加载完成后再执行
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initializePlugin);
+    } else {
+      // DOM已经加载完成，立即执行
+      initializePlugin();
     }
 
-    // Highlight drop zone when dragging over it
-    ['dragenter', 'dragover'].forEach(eventName => {
-      dropZone.addEventListener(eventName, highlight, false);
-    });
+    function initializePlugin() {
+      console.log('初始化插件...');
 
-    ['dragleave', 'drop'].forEach(eventName => {
-      dropZone.addEventListener(eventName, unhighlight, false);
-    });
+      // HTML File Drop Zone Functionality
+      const dropZone = document.getElementById('dropZone');
+      const fileInput = document.getElementById('fileInput');
+      const processingIndicator = document.getElementById('processingIndicator');
+      const processingText = document.getElementById('processingText');
 
-    function highlight() {
-      dropZone.classList.add('dragover');
-    }
-
-    function unhighlight() {
-      dropZone.classList.remove('dragover');
-    }
-
-    // Handle dropped files
-    dropZone.addEventListener('drop', handleDrop, false);
-
-    function handleDrop(e) {
-      const dt = e.dataTransfer;
-      const files = dt.files;
-      handleFiles(files);
-    }
-
-    // Handle file input change
-    dropZone.addEventListener('click', () => {
-      fileInput.click();
-    });
-
-    fileInput.addEventListener('change', function() {
-      handleFiles(this.files);
-    });
-
-    function handleFiles(files) {
-      if (files.length === 0) return;
-
-      const file = files[0];
-      if (!file.name.match(/\.(html|htm)$/i)) {
-        alert('请选择HTML文件');
+      // 检查关键元素是否存在
+      if (!dropZone) {
+        console.error('dropZone元素未找到');
+        return;
+      }
+      if (!fileInput) {
+        console.error('fileInput元素未找到');
         return;
       }
 
-      // Show processing indicator
-      processingIndicator.classList.add('show');
-      processingText.textContent = '正在解析HTML文件...';
+      console.log('找到dropZone和fileInput元素');
 
-      const reader = new FileReader();
+      // AI设置元素
+      const enableAI = document.getElementById('enableAI');
+      const aiModel = document.getElementById('aiModel');
+      const apiKey = document.getElementById('apiKey');
+      const apiKeySection = document.getElementById('apiKeySection');
+      const designPreference = document.getElementById('designPreference');
 
-      reader.onload = function(e) {
-        const htmlContent = e.target.result;
-
-        // Send HTML content to the plugin code
-        parent.postMessage({
-          pluginMessage: {
-            type: 'parse-html',
-            htmlContent: htmlContent
+      // AI设置事件监听
+      if (aiModel) {
+        aiModel.addEventListener('change', function() {
+          if (this.value === 'local') {
+            if (apiKeySection) apiKeySection.style.display = 'none';
+          } else {
+            if (apiKeySection) apiKeySection.style.display = 'block';
           }
-        }, '*');
+        });
+      }
+
+      // 检查localStorage是否可用
+      function isLocalStorageAvailable() {
+        try {
+          const test = '__localStorage_test__';
+          localStorage.setItem(test, test);
+          localStorage.removeItem(test);
+          return true;
+        } catch (e) {
+          console.warn('localStorage不可用，设置将不会保存');
+          return false;
+        }
+      }
+
+      // 从本地存储加载设置
+      function loadSettings() {
+        if (!isLocalStorageAvailable()) {
+          console.log('localStorage不可用，跳过设置加载');
+          return;
+        }
+
+        try {
+          const savedApiKey = localStorage.getItem('figma-html-converter-api-key');
+          const savedModel = localStorage.getItem('figma-html-converter-ai-model');
+          const savedPreference = localStorage.getItem('figma-html-converter-design-preference');
+
+          if (savedApiKey && apiKey) apiKey.value = savedApiKey;
+          if (savedModel && aiModel) aiModel.value = savedModel;
+          if (savedPreference && designPreference) designPreference.value = savedPreference;
+
+          // 触发模型变化事件以显示/隐藏API Key输入框
+          if (aiModel) aiModel.dispatchEvent(new Event('change'));
+        } catch (e) {
+          console.warn('加载设置失败:', e);
+        }
+      }
+
+      // 保存设置到本地存储
+      function saveSettings() {
+        if (!isLocalStorageAvailable()) {
+          console.log('localStorage不可用，跳过设置保存');
+          return;
+        }
+
+        try {
+          if (apiKey) localStorage.setItem('figma-html-converter-api-key', apiKey.value);
+          if (aiModel) localStorage.setItem('figma-html-converter-ai-model', aiModel.value);
+          if (designPreference) localStorage.setItem('figma-html-converter-design-preference', designPreference.value);
+        } catch (e) {
+          console.warn('保存设置失败:', e);
+        }
+      }
+
+      // 页面加载时加载设置
+      loadSettings();
+
+      // Setup drag and drop events
+      console.log('设置拖拽事件...');
+      ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        dropZone.addEventListener(eventName, preventDefaults, false);
+      });
+
+      function preventDefaults(e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+
+      // Highlight drop zone when dragging over it
+      ['dragenter', 'dragover'].forEach(eventName => {
+        dropZone.addEventListener(eventName, highlight, false);
+      });
+
+      ['dragleave', 'drop'].forEach(eventName => {
+        dropZone.addEventListener(eventName, unhighlight, false);
+      });
+
+      function highlight() {
+        console.log('拖拽高亮');
+        dropZone.classList.add('dragover');
+      }
+
+      function unhighlight() {
+        console.log('取消拖拽高亮');
+        dropZone.classList.remove('dragover');
+      }
+
+      // Handle dropped files
+      dropZone.addEventListener('drop', handleDrop, false);
+
+      function handleDrop(e) {
+        console.log('文件被拖拽释放');
+        const dt = e.dataTransfer;
+        const files = dt.files;
+        handleFiles(files);
+      }
+
+      // Handle file input change
+      dropZone.addEventListener('click', (e) => {
+        console.log('拖拽区域被点击', e);
+        try {
+          fileInput.click();
+          console.log('文件选择对话框应该已打开');
+        } catch (error) {
+          console.error('打开文件选择对话框失败:', error);
+        }
+      });
+
+      fileInput.addEventListener('change', function(e) {
+        console.log('文件输入框变化', e);
+        console.log('选择的文件:', this.files);
+        handleFiles(this.files);
+      });
+
+      function handleFiles(files) {
+        console.log('处理文件:', files.length);
+        if (files.length === 0) return;
+
+        const file = files[0];
+        if (!file.name.match(/\.(html|htm)$/i)) {
+          alert('请选择HTML文件');
+          return;
+        }
+
+        // Show processing indicator
+        processingIndicator.classList.add('show');
+        processingText.textContent = '正在解析HTML文件...';
+
+        const reader = new FileReader();
+
+        reader.onload = function(e) {
+          const htmlContent = e.target.result;
+
+          // 尝试保存当前设置（如果localStorage可用）
+          saveSettings();
+
+          // 收集AI设置
+          const aiSettings = {
+            enabled: enableAI ? enableAI.checked : true,
+            model: aiModel ? aiModel.value : 'local',
+            apiKey: (aiModel && aiModel.value !== 'local' && apiKey && apiKey.value.trim()) ? apiKey.value.trim() : null,
+            designPreference: designPreference ? designPreference.value : 'auto'
+          };
+
+          console.log('AI设置:', aiSettings);
+
+          // Send HTML content and AI settings to the plugin code
+          parent.postMessage({
+            pluginMessage: {
+              type: 'parse-html',
+              htmlContent: htmlContent,
+              aiSettings: aiSettings
+            }
+          }, '*');
+        };
+
+        reader.onerror = function() {
+          processingIndicator.classList.remove('show');
+          alert('读取文件时出错');
+        };
+
+        reader.readAsText(file);
+      }
+
+      // Listen for messages from the plugin code
+      window.onmessage = function(event) {
+        const message = event.data.pluginMessage;
+
+        if (!message) return;
+
+        if (message.type === 'html-parse-complete') {
+          processingIndicator.classList.remove('show');
+        } else if (message.type === 'html-parse-error') {
+          processingIndicator.classList.remove('show');
+          alert('解析HTML时出错: ' + message.error);
+        } else if (message.type === 'html-parse-progress') {
+          processingText.textContent = message.message;
+        }
       };
 
-      reader.onerror = function() {
-        processingIndicator.classList.remove('show');
-        alert('读取文件时出错');
-      };
-
-      reader.readAsText(file);
+      console.log('插件初始化完成');
     }
 
+    // 全局函数，在initializePlugin外部
     function cancel() {
       parent.postMessage({
         pluginMessage: { type: 'cancel' }
       }, '*');
     }
 
-    // Listen for messages from the plugin code
-    window.onmessage = function(event) {
-      const message = event.data.pluginMessage;
+    function testFunction() {
+      console.log('测试函数被调用');
 
-      if (!message) return;
+      // 检查关键元素
+      const dropZone = document.getElementById('dropZone');
+      const fileInput = document.getElementById('fileInput');
 
-      if (message.type === 'html-parse-complete') {
-        processingIndicator.classList.remove('show');
-      } else if (message.type === 'html-parse-error') {
-        processingIndicator.classList.remove('show');
-        alert('解析HTML时出错: ' + message.error);
-      } else if (message.type === 'html-parse-progress') {
-        processingText.textContent = message.message;
+      console.log('dropZone:', dropZone);
+      console.log('fileInput:', fileInput);
+
+      // 检查localStorage
+      const localStorageAvailable = (() => {
+        try {
+          const test = '__test__';
+          localStorage.setItem(test, test);
+          localStorage.removeItem(test);
+          return true;
+        } catch (e) {
+          return false;
+        }
+      })();
+
+      console.log('localStorage可用:', localStorageAvailable);
+
+      let message = 'JavaScript正常工作！\n\n';
+      message += `dropZone: ${dropZone ? '✅ 找到' : '❌ 未找到'}\n`;
+      message += `fileInput: ${fileInput ? '✅ 找到' : '❌ 未找到'}\n`;
+      message += `localStorage: ${localStorageAvailable ? '✅ 可用' : '❌ 不可用'}\n`;
+      message += '\n请检查控制台查看详细日志。';
+
+      alert(message);
+
+      if (dropZone && fileInput) {
+        console.log('所有关键元素都存在，尝试手动触发文件选择');
+        try {
+          fileInput.click();
+        } catch (error) {
+          console.error('手动触发文件选择失败:', error);
+        }
+      } else {
+        console.error('缺少关键元素');
       }
-    };
+    }
   </script>
 </body>
 </html> 

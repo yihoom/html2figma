@@ -2,6 +2,12 @@
 export interface ParseHtmlMessage {
   type: 'parse-html';
   htmlContent: string;
+  aiSettings?: {
+    enabled: boolean;
+    model: string;
+    apiKey?: string;
+    designPreference: string;
+  };
 }
 
 export interface CancelMessage {
